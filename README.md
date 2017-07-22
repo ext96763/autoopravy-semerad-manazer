@@ -1,0 +1,1 @@
+# autoopravy-semerad-manazer
