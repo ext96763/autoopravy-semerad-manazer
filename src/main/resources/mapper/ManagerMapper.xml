@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.autoopravy.semerad.manazer.InternalManager.mapper.ManagerRepository">
+
+    <select id="getUser" resultMap="userResultMap">
+        SELECT * FROM user_registr u  WHERE 1=1
+        AND  u.user_id = #{userId}
+    </select>
+
+    <select id="getUser1" resultMap="userResultMap">
+        SELECT * FROM user_registr u join repairs_registr r ON u.user_id = r.repair_user_id JOIN car_registr c ON c.car_user_id=u.user_id WHERE 1=1
+        AND  u.user_id = #{userId}
+    </select>
+
+
+    <!--<select id="searchUser" resultMap="userResultMap">-->
+        <!--SELECT r.car_id, user_name, user_detail, user_rc FROM user_registr r JOIN car_registr e ON  r.car_id = e.car_id WHERE 1=1-->
+        <!--<if test="r.user_name != null">-->
+            <!--<bind name="pattern" value="'%' + name + '%'" />-->
+            <!--AND LOWER(r.user_name) LIKE LOWER(#{pattern})-->
+        <!--</if>-->
+        <!--UNION-->
+        <!--SELECT r.car_id, user_name, user_detail, user_rc FROM user_registr r JOIN repairs_registr e ON e.car_id = r.car_id WHERE 1=1-->
+        <!--<bind name="pattern" value="'%' + name + '%'" />-->
+        <!--AND LOWER(r.user_name) LIKE LOWER(#{pattern})-->
+        <!--ORDER BY name DESC-->
+    <!--</select>-->
+
+
+    <resultMap id="userResultMap" type="com.autoopravy.semerad.manazer.InternalManager.model.User">
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userForeName" column="user_forename"/>
+        <result property="userRc" column="user_rc"/>
+        <result property="userDetail" column="user_detail"/>
+        <result property="userPhone" column="user_phone"/>
+        <result property="userEmail" column="user_email"/>
+        <collection property="cars" resultMap="carResultMap"/>
+    </resultMap>
+
+    <resultMap id="carResultMap" type="com.autoopravy.semerad.manazer.InternalManager.model.Car">
+        <result property="carId" column="car_id"/>
+        <result property="userCarId" column="car_user_id"/>
+        <result property="win" column="win"/>
+        <result property="spz" column="spz"/>
+        <result property="km" column="km"/>
+        <result property="carInfo" column="car_info"/>
+        <result property="startDayError" column="start_day_error"/>
+        <result property="endDayError" column="end_day_error"/>
+        <result property="featureRepairDate" column="feature_repair_date"/>
+        <result property="doneWork" column="done_work"/>
+        <result property="exist" column="exist"/>
+        <result property="buyedParts" column="buyed_parts"/>
+        <collection property="repairs" resultMap="repairResultMap"/>
+    </resultMap>
+
+    <resultMap id="repairResultMap" type="com.autoopravy.semerad.manazer.InternalManager.model.Repair">
+        <result property="repairId" column="repair_id"/>
+        <result property="userRepairId" column="repair_user_id"/>
+        <result property="repairs" column="repairs"/>
+        <result property="startOfRepair" column="start_of_repair"/>
+        <result property="endOfRepair" column="endOfRepair"/>
+        <result property="techCheck" column="tech_check"/>
+        <result property="oil" column="oil"/>
+    </resultMap>
+
+</mapper>
