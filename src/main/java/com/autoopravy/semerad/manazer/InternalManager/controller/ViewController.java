@@ -10,18 +10,30 @@ import java.util.Date;
 @Controller
 public class ViewController {
 
-    private String appMode;
-
-    @Autowired
-    public ViewController(Environment environment){
-        appMode = environment.getProperty("app-mode");
-    }
-
-    @RequestMapping("/")
-    public String index(Model model){
-        model.addAttribute("datetime", new Date());
-        model.addAttribute("username", "John");
-        model.addAttribute("mode", appMode);
-        return "index";
-    }
+//    private String appMode;
+//
+//    @Autowired
+//    ManagerController managerController;
+//
+//    @Autowired
+//    public ViewController(Environment environment){
+//        appMode = environment.getProperty("app-mode");
+//    }
+//
+//    @RequestMapping("/")
+//    public String index(Model model){
+//        model.addAttribute("datetime", new Date());
+//        model.addAttribute("username", "John");
+//        model.addAttribute("mode", appMode);
+//        return "index";
+//    }
+//
+//    @RequestMapping("/manager/cars")
+//    public String cars(Model model){
+//        model.addAttribute("datetime", new Date());
+//        model.addAttribute("username", "John");
+//        model.addAttribute("mode", appMode);
+//        model.addAttribute("cars", managerController.getCars());
+//        return "cars";
+//    }
 }

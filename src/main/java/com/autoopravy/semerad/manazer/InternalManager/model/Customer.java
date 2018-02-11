@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collection;
 
 
-public class User {
+public class Customer {
 
     @JsonProperty
     private Long userId;
@@ -31,9 +31,9 @@ public class User {
     @JsonProperty
     private Collection<Car> cars;
 
-    public User(){};
+    public Customer(){};
 
-    public User(Long userId, String userName, String userForeName, Long userRc, String userDetail, Long userPhone, String userEmail, Collection<Car> cars) {
+    public Customer(Long userId, String userName, String userForeName, Long userRc, String userDetail, Long userPhone, String userEmail, Collection<Car> cars) {
         this.userId = userId;
         this.userName = userName;
         this.userForeName = userForeName;
@@ -110,7 +110,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Customer{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", userForeName='" + userForeName + '\'' +

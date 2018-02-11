@@ -1,6 +1,9 @@
 package com.autoopravy.semerad.manazer.InternalManager.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Collection;
 import java.util.Date;
 
 public class Repair {
@@ -15,6 +18,7 @@ public class Repair {
     private String repairs;
 
     @JsonProperty
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
     private Date startOfRepair;
 
     @JsonProperty
@@ -26,9 +30,11 @@ public class Repair {
     @JsonProperty
     private Boolean oil;
 
+    private Collection<SparePart> parts;
+
     public Repair(){};
 
-    public Repair(Long repairId, Long userRepairId, String repairs, Date startOfRepair, Date endOfRepair, Boolean techCheck, Boolean oil) {
+    public Repair(Long repairId, Long userRepairId, String repairs, Date startOfRepair, Date endOfRepair, Boolean techCheck, Boolean oil, Collection<SparePart> parts) {
         this.repairId = repairId;
         this.userRepairId = userRepairId;
         this.repairs = repairs;
@@ -36,6 +42,7 @@ public class Repair {
         this.endOfRepair = endOfRepair;
         this.techCheck = techCheck;
         this.oil = oil;
+        this.parts = parts;
     }
 
     public Long getRepairId() {
@@ -94,6 +101,14 @@ public class Repair {
         this.oil = oil;
     }
 
+    public Collection<SparePart> getParts() {
+        return parts;
+    }
+
+    public void setParts(Collection<SparePart> parts) {
+        this.parts = parts;
+    }
+
     @Override
     public String toString() {
         return "Repair{" +
@@ -104,6 +119,7 @@ public class Repair {
                 ", endOfRepair=" + endOfRepair +
                 ", techCheck=" + techCheck +
                 ", oil=" + oil +
+                ", parts=" + parts +
                 '}';
     }
 }

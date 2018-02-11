@@ -1,6 +1,8 @@
 package com.autoopravy.semerad.manazer.InternalManager.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Collection;
 import java.util.Date;
 
@@ -25,9 +27,10 @@ public class Car {
     private String carInfo;
 
     @JsonProperty
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date startDayError;
 
-    @JsonProperty
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDayError;
 
     @JsonProperty

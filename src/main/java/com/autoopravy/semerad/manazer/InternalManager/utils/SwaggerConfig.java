@@ -30,7 +30,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Interni manazer")
-                .description("Rest API Powered By Profinit.eu")
+                .description("Rest API Powered By ME.inc")
                 .termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://github.com/IBM-Bluemix/news-aggregator/blob/master/LICENSE")

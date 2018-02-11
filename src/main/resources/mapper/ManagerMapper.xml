@@ -4,32 +4,135 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.autoopravy.semerad.manazer.InternalManager.mapper.ManagerRepository">
 
-    <select id="getUser" resultMap="userResultMap">
-        SELECT * FROM user_registr u  WHERE 1=1
-        AND  u.user_id = #{userId}
+<!--/////////////////////////////////BASIC///////////////////////////////////////////////////////////////////////////-->
+
+    <select id="getAllCustomers" resultMap="userResultMap">
+        SELECT * FROM customers u where 1=1
+        ORDER BY u.user_id DESC
     </select>
 
-    <select id="getUser1" resultMap="userResultMap">
-        SELECT * FROM user_registr u join repairs_registr r ON u.user_id = r.repair_user_id JOIN car_registr c ON c.car_user_id=u.user_id WHERE 1=1
+    <select id="getAllCars" resultMap="carResultMap">
+        SELECT * FROM cars c WHERE 1=1
+        ORDER BY c.car_id DESC
+    </select>
+
+    <select id="getAllRepairs" resultMap="repairResultMap">
+        SELECT * FROM repairs r where 1=1
+        ORDER BY r.repair_id DESC
+    </select>
+
+    <select id="getAllParts" resultMap="partResultMap">
+        SELECT * FROM parts p where 1=1
+        ORDER BY p.part_id DESC
+    </select>
+
+<!--//////////////////////Find user by parameters////////////////////////////////////////////////////////////////////-->
+
+    <select id="getUserById" resultMap="userResultMap">
+        SELECT * FROM customers u  WHERE 1=1
         AND  u.user_id = #{userId}
+        ORDER BY u.user_id DESC
+    </select>
+
+    <select id="getUserByName" resultMap="userResultMap">
+        SELECT * FROM customers u  WHERE 1=1
+        <if test="userName != null">
+        <bind name="pattern" value="'%' + userName + '%'" />
+        AND LOWER(u.user_name) LIKE LOWER(#{pattern})
+        </if>
+        ORDER BY u.user_id DESC
+    </select>
+
+    <select id="getUserByForeName" resultMap="userResultMap">
+        SELECT * FROM customers u  WHERE 1=1
+        <if test="userForename != null">
+            <bind name="pattern" value="'%' + userForename + '%'" />
+            AND LOWER(u.user_forename) LIKE LOWER(#{pattern})
+        </if>
+        ORDER BY u.user_id DESC
+    </select>
+
+    <select id="getUserByEmail" resultMap="userResultMap">
+        SELECT * FROM customers u  WHERE 1=1
+        <if test="userEmail != null">
+            <bind name="pattern" value="'%' + userEmail + '%'" />
+            AND LOWER(u.user_email) LIKE LOWER(#{pattern})
+        </if>
+        ORDER BY u.user_id DESC
+    </select>
+
+    <select id="getUserByBirthNumber" resultMap="userResultMap">
+        SELECT * FROM customers u  WHERE 1=1
+        <if test="userRc != null">
+            AND u.user_rc = (#{userRc})
+        </if>
+        ORDER BY u.user_id DESC
+    </select>
+
+    <select id="getUserByPhoneNumber" resultMap="userResultMap">
+        SELECT * FROM customers u  WHERE 1=1
+        <if test="userPhone != null">
+            AND u.user_phone = (#{userPhone})
+        </if>
+        ORDER BY u.user_id DESC
     </select>
 
 
-    <!--<select id="searchUser" resultMap="userResultMap">-->
-        <!--SELECT r.car_id, user_name, user_detail, user_rc FROM user_registr r JOIN car_registr e ON  r.car_id = e.car_id WHERE 1=1-->
-        <!--<if test="r.user_name != null">-->
-            <!--<bind name="pattern" value="'%' + name + '%'" />-->
-            <!--AND LOWER(r.user_name) LIKE LOWER(#{pattern})-->
-        <!--</if>-->
-        <!--UNION-->
-        <!--SELECT r.car_id, user_name, user_detail, user_rc FROM user_registr r JOIN repairs_registr e ON e.car_id = r.car_id WHERE 1=1-->
-        <!--<bind name="pattern" value="'%' + name + '%'" />-->
-        <!--AND LOWER(r.user_name) LIKE LOWER(#{pattern})-->
-        <!--ORDER BY name DESC-->
-    <!--</select>-->
+
+<!--///////////////////////////////////////User detail///////////////////////////////////////////////////////////////-->
+
+    <select id="getUserDetailById" resultMap="userResultMap">
+    SELECT * FROM customers u join repairs r ON u.user_id = r.repair_user_id JOIN cars c ON c.car_user_id=u.user_id join parts p ON p.part_user_id=u.user_id WHERE 1=1 AND  u.user_id = #{userId};
+    </select>
+
+    <insert id="insertUser" parameterType="com.autoopravy.semerad.manazer.InternalManager.model.Customer" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+        insert into customers (user_name, user_rc, user_detail, user_phone, user_email, user_forename)
+        values (#{userName},#{userRc},#{userDetail},#{userPhone},#{userEmail}, #{userForeName})
+    </insert>
+
+    <update id="updateUser">
+        update customers set
+        user_name = #{userName},
+        user_rc = #{userRc},
+        user_detail = #{userDetail},
+        user_phone = #{userPhone},
+        user_email = #{userEmail},
+        user_forename = #{userForeName}
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteUser">
+        delete from customers where user_id = #{userId}
+    </delete>
+
+<!--///////////////////////////////////////Car detail////////////////////////////////////////////////////////////////-->
 
 
-    <resultMap id="userResultMap" type="com.autoopravy.semerad.manazer.InternalManager.model.User">
+    <select id="getCar" resultMap="carResultMap">
+        SELECT * FROM cars c join repairs r ON c.car_user_id = r.repair_user_id  WHERE 1=1 AND  c.car_id = '5';
+    </select>
+
+
+
+<!--///////////////////////////////////////Repair detail/////////////////////////////////////////////////////////////-->
+
+
+    <select id="getRepair" resultMap="repairResultMap">
+        SELECT * FROM repairs r join cars c ON c.car_user_id = r.repair_user_id  WHERE 1=1 AND  r.repair_id = '1';
+    </select>
+
+
+
+<!--///////////////////////////////////////Part detail///////////////////////////////////////////////////////////////-->
+
+
+    <select id="getPart" resultMap="partResultMap">
+        SELECT * FROM parts p join repairs r ON p.part_user_id = r.repair_user_id  WHERE 1=1 AND  p.part_id = '1';
+    </select>
+
+
+
+    <resultMap id="userResultMap" type="com.autoopravy.semerad.manazer.InternalManager.model.Customer">
         <result property="userId" column="user_id"/>
         <result property="userName" column="user_name"/>
         <result property="userForeName" column="user_forename"/>
@@ -47,8 +150,8 @@
         <result property="spz" column="spz"/>
         <result property="km" column="km"/>
         <result property="carInfo" column="car_info"/>
-        <result property="startDayError" column="start_day_error"/>
-        <result property="endDayError" column="end_day_error"/>
+        <result property="startDayError" column="start_date_error"/>
+        <result property="endDayError" column="end_date_error"/>
         <result property="featureRepairDate" column="feature_repair_date"/>
         <result property="doneWork" column="done_work"/>
         <result property="exist" column="exist"/>
@@ -60,10 +163,19 @@
         <result property="repairId" column="repair_id"/>
         <result property="userRepairId" column="repair_user_id"/>
         <result property="repairs" column="repairs"/>
-        <result property="startOfRepair" column="start_of_repair"/>
-        <result property="endOfRepair" column="endOfRepair"/>
+        <result property="startOfRepair" column="start_date_of_repair"/>
+        <result property="endOfRepair" column="end_date_of_repair"/>
         <result property="techCheck" column="tech_check"/>
         <result property="oil" column="oil"/>
+        <collection property="parts" resultMap="partResultMap"/>
+    </resultMap>
+
+    <resultMap id="partResultMap" type="com.autoopravy.semerad.manazer.InternalManager.model.SparePart">
+        <result property="partId" column="part_id"/>
+        <result property="userPartId" column="part_user_id"/>
+        <result property="partNumber" column="part_number"/>
+        <result property="partDetail" column="part_detail"/>
+        <result property="repairDate" column="repair_date"/>
     </resultMap>
 
 </mapper>
