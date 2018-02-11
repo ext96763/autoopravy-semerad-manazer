@@ -40,7 +40,8 @@ public class ManagerController {
             @ApiResponse(code = 500, message = "Failure")})
     @CrossOrigin()
     @RequestMapping(value = "/customers", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<Customer> getAllUsers() {
+    public @ResponseBody
+    List<Customer> getAllUsers() {
         return managerRepository.getAllCustomers();
     }
 
@@ -52,7 +53,8 @@ public class ManagerController {
             @ApiResponse(code = 500, message = "Failure")})
     @CrossOrigin()
     @RequestMapping(value = "/cars", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<Car> getAllCars() {
+    public @ResponseBody
+    List<Car> getAllCars() {
         return managerRepository.getAllCars();
     }
 
@@ -64,7 +66,8 @@ public class ManagerController {
             @ApiResponse(code = 500, message = "Failure")})
     @CrossOrigin()
     @RequestMapping(value = "/repairs", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<Repair> getAllRepairs() {
+    public @ResponseBody
+    List<Repair> getAllRepairs() {
         return managerRepository.getAllRepairs();
     }
 
@@ -76,7 +79,8 @@ public class ManagerController {
             @ApiResponse(code = 500, message = "Failure")})
     @CrossOrigin()
     @RequestMapping(value = "/parts", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<SparePart> getAllParts() {
+    public @ResponseBody
+    List<SparePart> getAllParts() {
         return managerRepository.getAllParts();
     }
     //------------------------------------------------------------------------------------------------------------------
@@ -113,6 +117,12 @@ public class ManagerController {
         return new ResponseEntity<>(customer, HttpStatus.FOUND);
     }
 
+    /**
+     * User detail By ID [GET]
+     *
+     * @param id unique user ID
+     * @return Particular user in JSON
+     */
     @ApiOperation(value = "find user detail by ID", notes = "find user detail by ID", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
