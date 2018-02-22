@@ -1,7 +1,7 @@
 package com.autoopravy.semerad.manazer.InternalManager.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Collection;
 import java.util.Date;
@@ -12,7 +12,7 @@ public class Car {
     private Long carId;
 
     @JsonProperty
-    private Long userCarId;
+    private Long carUserId;
 
     @JsonProperty
     private String win;
@@ -27,13 +27,16 @@ public class Car {
     private String carInfo;
 
     @JsonProperty
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private Date startDayError;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    private Date startDateError;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date endDayError;
 
     @JsonProperty
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    private Date endDateError;
+
+    @JsonProperty
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date featureRepairDate;
 
     @JsonProperty
@@ -50,15 +53,15 @@ public class Car {
 
     public Car(){};
 
-    public Car(Long carId, Long userCarId, String win, String spz, Long km, String carInfo, Date startDayError, Date endDayError, Date featureRepairDate, Boolean doneWork, Boolean exist, String buyedParts, Collection<Repair> repairs) {
+    public Car(Long carId, Long carUserId, String win, String spz, Long km, String carInfo, Date startDateError, Date endDateError, Date featureRepairDate, Boolean doneWork, Boolean exist, String buyedParts, Collection<Repair> repairs) {
         this.carId = carId;
-        this.userCarId = userCarId;
+        this.carUserId = carUserId;
         this.win = win;
         this.spz = spz;
         this.km = km;
         this.carInfo = carInfo;
-        this.startDayError = startDayError;
-        this.endDayError = endDayError;
+        this.startDateError = startDateError;
+        this.endDateError = endDateError;
         this.featureRepairDate = featureRepairDate;
         this.doneWork = doneWork;
         this.exist = exist;
@@ -74,12 +77,12 @@ public class Car {
         this.carId = carId;
     }
 
-    public Long getUserCarId() {
-        return userCarId;
+    public Long getCarUserId() {
+        return carUserId;
     }
 
-    public void setUserCarId(Long userCarId) {
-        this.userCarId = userCarId;
+    public void setCarUserId(Long carUserId) {
+        this.carUserId = carUserId;
     }
 
     public String getWin() {
@@ -114,20 +117,20 @@ public class Car {
         this.carInfo = carInfo;
     }
 
-    public Date getStartDayError() {
-        return startDayError;
+    public Date getStartDateError() {
+        return startDateError;
     }
 
-    public void setStartDayError(Date startDayError) {
-        this.startDayError = startDayError;
+    public void setStartDateError(Date startDateError) {
+        this.startDateError = startDateError;
     }
 
-    public Date getEndDayError() {
-        return endDayError;
+    public Date getEndDateError() {
+        return endDateError;
     }
 
-    public void setEndDayError(Date endDayError) {
-        this.endDayError = endDayError;
+    public void setEndDateError(Date endDateError) {
+        this.endDateError = endDateError;
     }
 
     public Date getFeatureRepairDate() {
@@ -174,13 +177,13 @@ public class Car {
     public String toString() {
         return "Car{" +
                 "carId=" + carId +
-                ", userCarId=" + userCarId +
+                ", carUserId=" + carUserId +
                 ", win='" + win + '\'' +
                 ", spz='" + spz + '\'' +
                 ", km=" + km +
                 ", carInfo='" + carInfo + '\'' +
-                ", startDayError=" + startDayError +
-                ", endDayError=" + endDayError +
+                ", startDateError=" + startDateError +
+                ", endDateError=" + endDateError +
                 ", featureRepairDate=" + featureRepairDate +
                 ", doneWork=" + doneWork +
                 ", exist=" + exist +

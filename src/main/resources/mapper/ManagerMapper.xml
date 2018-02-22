@@ -26,6 +26,8 @@
         ORDER BY p.part_id DESC
     </select>
 
+
+
 <!--//////////////////////Find user by parameters////////////////////////////////////////////////////////////////////-->
 
     <select id="getUserById" resultMap="userResultMap">
@@ -82,7 +84,7 @@
 <!--///////////////////////////////////////User detail///////////////////////////////////////////////////////////////-->
 
     <select id="getUserDetailById" resultMap="userResultMap">
-    SELECT * FROM customers u join repairs r ON u.user_id = r.repair_user_id JOIN cars c ON c.car_user_id=u.user_id join parts p ON p.part_user_id=u.user_id WHERE 1=1 AND  u.user_id = #{userId};
+    SELECT * FROM customers u left join repairs r ON u.user_id = r.repair_user_id left join cars c ON c.car_user_id=u.user_id left join parts p ON p.part_user_id=u.user_id WHERE 1=1 AND  u.user_id = #{userId};
     </select>
 
     <insert id="insertUser" parameterType="com.autoopravy.semerad.manazer.InternalManager.model.Customer" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
@@ -105,12 +107,60 @@
         delete from customers where user_id = #{userId}
     </delete>
 
+
+
 <!--///////////////////////////////////////Car detail////////////////////////////////////////////////////////////////-->
 
-
-    <select id="getCar" resultMap="carResultMap">
-        SELECT * FROM cars c join repairs r ON c.car_user_id = r.repair_user_id  WHERE 1=1 AND  c.car_id = '5';
+    <select id="getCarById" resultMap="carResultMap">
+        SELECT * FROM cars r  WHERE 1=1
+        <if test="carId != null and carId != ''">
+            AND  r.car_id = #{carId}
+        </if>
+        ORDER BY r.car_id DESC
     </select>
+
+    <select id="getCarDetailById" resultMap="carResultMap">
+        SELECT * FROM cars c left join repairs r ON c.car_user_id= r.repair_user_id left join parts p ON c.car_user_id=p.part_user_id  WHERE 1=1 AND  c.car_id = #{carId};
+    </select>
+
+    <insert id="insertCar" parameterType="com.autoopravy.semerad.manazer.InternalManager.model.Car" useGeneratedKeys="true" keyProperty="carId" keyColumn="car_id">
+        insert into cars (win, spz, km, car_info, end_date_error, feature_repair_date, done_work, exist, buyed_parts, car_user_id, start_date_error)
+        values (#{win},#{spz},#{km},#{carInfo},#{endDateError}, #{featureRepairDate},#{doneWork},#{exist},#{buyedParts}, #{carUserId}, #{startDateError})
+    </insert>
+
+    <update id="updateCar">
+        update cars set
+            win = #{win},
+            spz = #{spz},
+            km = #{km},
+            car_info = #{carInfo},
+            end_date_error = #{endDateError},
+            feature_repair_date = #{featureRepairDate},
+            done_work = #{doneWork},
+            exist = #{exist},
+            buyed_parts = #{buyedParts},
+            car_user_id = #{carUserId},
+            start_date_error = #{startDateError}
+        where car_id = #{carId}
+    </update>
+
+    <delete id="deleteCar">
+        delete from cars where car_id = #{carId}
+    </delete>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -145,14 +195,14 @@
 
     <resultMap id="carResultMap" type="com.autoopravy.semerad.manazer.InternalManager.model.Car">
         <result property="carId" column="car_id"/>
-        <result property="userCarId" column="car_user_id"/>
+        <result property="carUserId" column="car_user_id"/>
         <result property="win" column="win"/>
         <result property="spz" column="spz"/>
         <result property="km" column="km"/>
         <result property="carInfo" column="car_info"/>
-        <result property="startDayError" column="start_date_error"/>
-        <result property="endDayError" column="end_date_error"/>
-        <result property="featureRepairDate" column="feature_repair_date"/>
+        <result property="startDateError" column="start_date_error" javaType="java.util.Date"/>
+        <result property="endDateError" column="end_date_error" javaType="java.util.Date"/>
+        <result property="featureRepairDate" column="feature_repair_date" javaType="java.util.Date"/>
         <result property="doneWork" column="done_work"/>
         <result property="exist" column="exist"/>
         <result property="buyedParts" column="buyed_parts"/>
@@ -163,8 +213,8 @@
         <result property="repairId" column="repair_id"/>
         <result property="userRepairId" column="repair_user_id"/>
         <result property="repairs" column="repairs"/>
-        <result property="startOfRepair" column="start_date_of_repair"/>
-        <result property="endOfRepair" column="end_date_of_repair"/>
+        <result property="startOfRepair" column="start_date_of_repair" javaType="java.util.Date"/>
+        <result property="endOfRepair" column="end_date_of_repair" javaType="java.util.Date"/>
         <result property="techCheck" column="tech_check"/>
         <result property="oil" column="oil"/>
         <collection property="parts" resultMap="partResultMap"/>
@@ -172,10 +222,10 @@
 
     <resultMap id="partResultMap" type="com.autoopravy.semerad.manazer.InternalManager.model.SparePart">
         <result property="partId" column="part_id"/>
-        <result property="userPartId" column="part_user_id"/>
+        <result property="partUserId" column="part_user_id"/>
         <result property="partNumber" column="part_number"/>
         <result property="partDetail" column="part_detail"/>
-        <result property="repairDate" column="repair_date"/>
+        <result property="repairDate" column="repair_date" javaType="java.util.Date"/>
     </resultMap>
 
 </mapper>

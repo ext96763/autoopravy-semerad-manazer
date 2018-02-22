@@ -22,6 +22,7 @@ public class Repair {
     private Date startOfRepair;
 
     @JsonProperty
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date endOfRepair;
 
     @JsonProperty

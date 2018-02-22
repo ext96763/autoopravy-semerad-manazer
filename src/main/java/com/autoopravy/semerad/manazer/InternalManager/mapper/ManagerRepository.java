@@ -5,8 +5,10 @@ import com.autoopravy.semerad.manazer.InternalManager.model.Car;
 import com.autoopravy.semerad.manazer.InternalManager.model.Customer;
 import com.autoopravy.semerad.manazer.InternalManager.model.Repair;
 import com.autoopravy.semerad.manazer.InternalManager.model.SparePart;
+import com.wordnik.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -26,11 +28,7 @@ public interface ManagerRepository {
 
     List<SparePart> getAllParts();
 
-    List<Car> getCar();
-
-    List<Repair> getRepair();
-
-    List<SparePart> getPart();
+    //------------------------------------------------------------------------------------------------------------------
 
     Customer getUserById(Integer id);
 
@@ -42,6 +40,21 @@ public interface ManagerRepository {
 
     void deleteUser(Integer id);
 
+    //------------------------------------------------------------------------------------------------------------------
+
+//    @Select(value = "select * from cars c  where 1=1 and c.car_id=#{carId}")
+//    @ResultMap("carResultMap")
+    Car getCarById(@Param("carId") Integer id);
+
+    List<Car> getCarDetailById(@Param("carId") Integer id);
+
+    void insertCar(Car car);
+
+    void updateCar(Car car);
+
+    void deleteCar(Integer id);
+
+    //------------------------------------------------------------------------------------------------------------------
 
 //    List<Record> searchByName(@Param("name") String name);
 //

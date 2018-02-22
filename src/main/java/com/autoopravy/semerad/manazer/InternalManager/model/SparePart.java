@@ -1,5 +1,6 @@
 package com.autoopravy.semerad.manazer.InternalManager.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -16,19 +17,20 @@ public class SparePart {
     private String partDetail;
 
     @JsonProperty
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date repairDate;
 
     @JsonProperty
-    private Long userPartId;
+    private Long partUserId;
 
     public SparePart(){};
 
-    public SparePart(Long partId, Long partNumber, String partDetail, Date repairDate, Long userPartId) {
+    public SparePart(Long partId, Long partNumber, String partDetail, Date repairDate, Long partUserId) {
         this.partId = partId;
         this.partNumber = partNumber;
         this.partDetail = partDetail;
         this.repairDate = repairDate;
-        this.userPartId = userPartId;
+        this.partUserId = partUserId;
     }
 
     public Long getPartId() {
@@ -63,12 +65,12 @@ public class SparePart {
         this.repairDate = repairDate;
     }
 
-    public Long getUserPartId() {
-        return userPartId;
+    public Long getPartUserId() {
+        return partUserId;
     }
 
-    public void setUserPartId(Long userPartId) {
-        this.userPartId = userPartId;
+    public void setPartUserId(Long partUserId) {
+        this.partUserId = partUserId;
     }
 
     @Override
@@ -78,7 +80,7 @@ public class SparePart {
                 ", partNumber=" + partNumber +
                 ", partDetail='" + partDetail + '\'' +
                 ", repairDate=" + repairDate +
-                ", userPartId=" + userPartId +
+                ", partUserId=" + partUserId +
                 '}';
     }
 }
