@@ -633,46 +633,6 @@ public class ManagerController {
         return new ResponseEntity<>(sparePart, responseHeaders, HttpStatus.FOUND);
     }
 
-//    /**
-//     * SparePart DETAIL By ID [GET]
-//     *
-//     * @param id unique repair ID
-//     * @return Particular repair in JSON
-//     */
-//    @ApiOperation(value = "find SparePart detail by ID", notes = "find SparePart detail by ID", produces = "application/json")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
-//            @ApiResponse(code = 400, message = "Bad Request"),
-//            @ApiResponse(code = 404, message = "Not Found"),
-//            @ApiResponse(code = 500, message = "Failure")})
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "SparePart unique ID", value = "partId", required = true, dataType = "int", paramType = "query")
-//
-//    })
-//    @CrossOrigin()
-//    @RequestMapping(value = "/part/detail", method = RequestMethod.GET, produces = "application/json")
-//    public @ResponseBody
-//    ResponseEntity<List<SparePart>> getPartDetailById(@RequestParam(value = "id", required = true) Integer id) {
-//        List<SparePart> partDetail = new ArrayList<>();
-//        HttpHeaders responseHeaders = new HttpHeaders();
-//        try {
-//            partDetail = managerRepository.getPartDetailById(id);
-//        } catch (Exception e) {
-//            logger.error("Cannot find in DB SparePart with ID: " + id);
-//            responseHeaders.set("SparePartDetailFound", "false");
-//            return new ResponseEntity<>(partDetail, responseHeaders, HttpStatus.NOT_FOUND);
-//        }
-//        if (partDetail == null || partDetail.size() <= 0) {
-//            logger.error("No matches in DB for partId: " + id + " wasn't found");
-//            responseHeaders.set("SparePartDetailFound", "false");
-//            return new ResponseEntity<>(partDetail, responseHeaders, HttpStatus.NOT_FOUND);
-//        } else {
-//            responseHeaders.set("SparePartDetailFound", "true");
-//            logger.info("SparePartDetail found ID: " + id);
-//        }
-//        return new ResponseEntity<>(partDetail, responseHeaders, HttpStatus.FOUND);
-//    }
-
     /**
      * Inserts new SparePart into DB [POST]
      *
@@ -692,7 +652,6 @@ public class ManagerController {
     ResponseEntity<SparePart> insertNewPart(@RequestBody SparePart sparePart) {
         HttpHeaders responseHeaders = new HttpHeaders();
         try {
-            //TODO find why partId dont generate
             managerRepository.insertPart(sparePart);
         } catch (Exception e) {
             logger.error(e);
@@ -762,5 +721,4 @@ public class ManagerController {
         logger.info("SparePart Deleted. SparePart ID: " + id);
         return new ResponseEntity<>(responseHeaders, HttpStatus.OK);
     }
-
 }
