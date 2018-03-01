@@ -5,11 +5,8 @@ import com.autoopravy.semerad.manazer.InternalManager.model.Car;
 import com.autoopravy.semerad.manazer.InternalManager.model.Customer;
 import com.autoopravy.semerad.manazer.InternalManager.model.Repair;
 import com.autoopravy.semerad.manazer.InternalManager.model.SparePart;
-import com.wordnik.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -42,7 +39,7 @@ public interface ManagerRepository {
 
     //------------------------------------------------------------------------------------------------------------------
 
-//    @Select(value = "select * from cars c  where 1=1 and c.car_id=#{carId}")
+    //    @Select(value = "select * from cars c  where 1=1 and c.car_id=#{carId}")
 //    @ResultMap("carResultMap")
     Car getCarById(@Param("carId") Integer id);
 
@@ -56,9 +53,28 @@ public interface ManagerRepository {
 
     //------------------------------------------------------------------------------------------------------------------
 
-//    List<Record> searchByName(@Param("name") String name);
-//
-//    List<Record> searchTender(@Param("name") String name, @Param("dateFrom") Date dateCreated, @Param("dateTo") Date dueDate, @Param("volumeFrom") Double volumeFrom, @Param("volumeTo") Double volumeTo);
-//
-//    List<Retrieval> findLastDate();
+    //    @Select(value = "select * from repairs r  where 1=1 and r.repair_id=#{repairId}")
+//    @ResultMap("repairResultMap")
+    Repair getRepairById(@Param("repairId") Integer id);
+
+    List<Repair> getRepairDetailById(@Param("repairId") Integer id);
+
+    void insertRepair(Repair repair);
+
+    void updateRepair(Repair repair);
+
+    void deleteRepair(Integer id);
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    SparePart getPartById(@Param("partId") Integer id);
+
+    void insertPart(SparePart sparePart);
+
+    void updatePart(SparePart sparePart);
+
+    void deletePart(Integer id);
+
+    //------------------------------------------------------------------------------------------------------------------
+
 }

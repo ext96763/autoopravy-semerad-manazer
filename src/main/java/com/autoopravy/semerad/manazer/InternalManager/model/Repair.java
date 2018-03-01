@@ -12,7 +12,10 @@ public class Repair {
     private Long repairId;
 
     @JsonProperty
-    private Long userRepairId;
+    private Long carId;
+
+    @JsonProperty
+    private Long repairUserId;
 
     @JsonProperty
     private String repairs;
@@ -35,9 +38,10 @@ public class Repair {
 
     public Repair(){};
 
-    public Repair(Long repairId, Long userRepairId, String repairs, Date startOfRepair, Date endOfRepair, Boolean techCheck, Boolean oil, Collection<SparePart> parts) {
+    public Repair(Long repairId, Long carId, Long repairUserId, String repairs, Date startOfRepair, Date endOfRepair, Boolean techCheck, Boolean oil, Collection<SparePart> parts) {
         this.repairId = repairId;
-        this.userRepairId = userRepairId;
+        this.carId = carId;
+        this.repairUserId = repairUserId;
         this.repairs = repairs;
         this.startOfRepair = startOfRepair;
         this.endOfRepair = endOfRepair;
@@ -54,12 +58,20 @@ public class Repair {
         this.repairId = repairId;
     }
 
-    public Long getUserRepairId() {
-        return userRepairId;
+    public Long getCarId() {
+        return carId;
     }
 
-    public void setUserRepairId(Long userRepairId) {
-        this.userRepairId = userRepairId;
+    public void setCarId(Long carId) {
+        this.carId = carId;
+    }
+
+    public Long getRepairUserId() {
+        return repairUserId;
+    }
+
+    public void setRepairUserId(Long repairUserId) {
+        this.repairUserId = repairUserId;
     }
 
     public String getRepairs() {
@@ -114,7 +126,8 @@ public class Repair {
     public String toString() {
         return "Repair{" +
                 "repairId=" + repairId +
-                ", userRepairId=" + userRepairId +
+                ", carId=" + carId +
+                ", repairUserId=" + repairUserId +
                 ", repairs='" + repairs + '\'' +
                 ", startOfRepair=" + startOfRepair +
                 ", endOfRepair=" + endOfRepair +

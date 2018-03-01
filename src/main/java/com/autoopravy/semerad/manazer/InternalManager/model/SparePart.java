@@ -2,6 +2,7 @@ package com.autoopravy.semerad.manazer.InternalManager.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
@@ -9,6 +10,12 @@ public class SparePart {
 
     @JsonProperty
     private Long partId;
+
+    @JsonProperty
+    private Long repairId;
+
+    @JsonProperty
+    private Long carId;
 
     @JsonProperty
     private Long partNumber;
@@ -25,8 +32,10 @@ public class SparePart {
 
     public SparePart(){};
 
-    public SparePart(Long partId, Long partNumber, String partDetail, Date repairDate, Long partUserId) {
+    public SparePart(Long partId, Long repairId, Long carId, Long partNumber, String partDetail, Date repairDate, Long partUserId) {
         this.partId = partId;
+        this.repairId = repairId;
+        this.carId = carId;
         this.partNumber = partNumber;
         this.partDetail = partDetail;
         this.repairDate = repairDate;
@@ -39,6 +48,22 @@ public class SparePart {
 
     public void setPartId(Long partId) {
         this.partId = partId;
+    }
+
+    public Long getRepairId() {
+        return repairId;
+    }
+
+    public void setRepairId(Long repairId) {
+        this.repairId = repairId;
+    }
+
+    public Long getCarId() {
+        return carId;
+    }
+
+    public void setCarId(Long carId) {
+        this.carId = carId;
     }
 
     public Long getPartNumber() {
@@ -77,6 +102,8 @@ public class SparePart {
     public String toString() {
         return "SparePart{" +
                 "partId=" + partId +
+                ", repairId=" + repairId +
+                ", carId=" + carId +
                 ", partNumber=" + partNumber +
                 ", partDetail='" + partDetail + '\'' +
                 ", repairDate=" + repairDate +

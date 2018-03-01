@@ -11,10 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -424,16 +422,345 @@ public class ManagerController {
         return new ResponseEntity<>(responseHeaders, HttpStatus.OK);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    @RequestMapping(value = "/repair", method = RequestMethod.GET)
-    @ApiResponse(code = 1, message = "get particular repair", response = Customer.class)
-    public List<Repair> getRepair() {
-        return null;
+    //----------------------------------------REPAIR endpoints----------------------------------------------------------
+
+    /**
+     * Repair By ID [GET]
+     *
+     * @return Particular repair in JSON
+     */
+    @ApiOperation(value = "Search repair by ID", notes = "Look for repair by ID", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Repair unique ID", value = "repairId", required = true, dataType = "int", paramType = "query")
+
+    })
+    @CrossOrigin()
+    @RequestMapping(value = "/repair", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<Repair> getRepairById(@RequestParam(value = "id", required = true) Integer id) {
+        Repair repair = new Repair();
+        HttpHeaders responseHeaders = new HttpHeaders();
+        try {
+            repair = managerRepository.getRepairById(id);
+        } catch (Exception e) {
+            logger.error("Cannot find in DB repair with ID: " + id);
+            return new ResponseEntity<>(repair, HttpStatus.NOT_FOUND);
+        }
+        if (repair == null) {
+            logger.error("No matches in DB for repairId " + id + " wasn't found");
+            responseHeaders.set("RepairFound", "false");
+            return new ResponseEntity<>(repair, responseHeaders, HttpStatus.NOT_FOUND);
+        } else {
+            responseHeaders.set("RepairFound", "true");
+            logger.info("Repair found ID: " + id);
+        }
+        return new ResponseEntity<>(repair, responseHeaders, HttpStatus.FOUND);
     }
 
-    @RequestMapping(value = "/part", method = RequestMethod.GET)
-    @ApiResponse(code = 1, message = "get particular part", response = SparePart.class)
-    public List<SparePart> getPart() {
-        return null;
+
+    /**
+     * Repair DETAIL By ID [GET]
+     *
+     * @param id unique repair ID
+     * @return Particular repair in JSON
+     */
+    @ApiOperation(value = "find repair detail by ID", notes = "find repair detail by ID", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Repair unique ID", value = "repairId", required = true, dataType = "int", paramType = "query")
+
+    })
+    @CrossOrigin()
+    @RequestMapping(value = "/repair/detail", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<List<Repair>> getRepairDetailById(@RequestParam(value = "id", required = true) Integer id) {
+        List<Repair> repairDetail = new ArrayList<>();
+        HttpHeaders responseHeaders = new HttpHeaders();
+        try {
+            repairDetail = managerRepository.getRepairDetailById(id);
+        } catch (Exception e) {
+            logger.error("Cannot find in DB repair with ID: " + id);
+            responseHeaders.set("RepairDetailFound", "false");
+            return new ResponseEntity<>(repairDetail, responseHeaders, HttpStatus.NOT_FOUND);
+        }
+        if (repairDetail == null || repairDetail.size() <= 0) {
+            logger.error("No matches in DB for repairId: " + id + " wasn't found");
+            responseHeaders.set("RepairDetailFound", "false");
+            return new ResponseEntity<>(repairDetail, responseHeaders, HttpStatus.NOT_FOUND);
+        } else {
+            responseHeaders.set("RepairDetailFound", "true");
+            logger.info("RepairDetail found ID: " + id);
+        }
+        return new ResponseEntity<>(repairDetail, responseHeaders, HttpStatus.FOUND);
     }
+
+    /**
+     * Inserts new Repair into DB [POST]
+     *
+     * @param repair new object
+     * @return if success same body
+     */
+    @SuppressWarnings("Duplicates")
+    @ApiOperation(value = "Post new Repair", notes = "Post new Repair", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
+    @CrossOrigin()
+    @RequestMapping(value = "/repair", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<Repair> insertNewRepair(@RequestBody Repair repair) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        try {
+            managerRepository.insertRepair(repair);
+        } catch (Exception e) {
+            logger.error(e);
+            if (e instanceof org.springframework.dao.DuplicateKeyException) {
+                responseHeaders.set("RepairSaved", "false");
+                responseHeaders.set("DuplicatedRepair", "true");
+            }
+            return new ResponseEntity<>(HttpStatus.INSUFFICIENT_STORAGE);
+        }
+        responseHeaders.set("RepairSaved", "true");
+        logger.info("New repair is saved. Repair ID: " + repair.getRepairId());
+        return new ResponseEntity<>(repair, responseHeaders, HttpStatus.CREATED);
+    }
+
+    /**
+     * Update repair information in DB [PUT]
+     *
+     * @param repair updated Object of repair
+     * @return if success returns updated body of repair
+     */
+    @ApiOperation(value = "Update Repair", notes = "Update Repair", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
+    @CrossOrigin()
+    @RequestMapping(value = "/repair", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<Repair> updateRepair(@RequestBody Repair repair) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        try {
+            managerRepository.updateRepair(repair);
+        } catch (Exception e) {
+            logger.error(e);
+            responseHeaders.set("RepairUpdated", "false");
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+        responseHeaders.set("RepairUpdated", "true");
+        logger.info("Repair updated. Repair ID: " + repair.getRepairId());
+        return new ResponseEntity<>(repair, responseHeaders, HttpStatus.CREATED);
+    }
+
+    /**
+     * Delete repair by ID
+     *
+     * @param id is obtained from FE
+     * @return null
+     */
+    @ApiOperation(value = "Delete Repair", notes = "Delete Repair", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
+    @CrossOrigin()
+    @RequestMapping(value = "/repair", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<Repair> deleteRepair(@RequestParam(value = "id", required = true) Integer id) {
+        try {
+            managerRepository.deleteRepair(id);
+        } catch (Exception e) {
+            logger.error(e);
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("RepairDeleted", "true");
+        logger.info("Repair Deleted. Repair ID: " + id);
+        return new ResponseEntity<>(responseHeaders, HttpStatus.OK);
+    }
+
+    //------------------------------------------PART endpoints----------------------------------------------------------
+
+    /**
+     * SparePart By ID [GET]
+     *
+     * @return Particular SparePart in JSON
+     */
+    @ApiOperation(value = "Search SparePart by ID", notes = "Look for SparePart by ID", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "SparePart unique ID", value = "partId", required = true, dataType = "int", paramType = "query")
+
+    })
+    @CrossOrigin()
+    @RequestMapping(value = "/part", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<SparePart> getPartById(@RequestParam(value = "id", required = true) Integer id) {
+        SparePart sparePart = new SparePart();
+        HttpHeaders responseHeaders = new HttpHeaders();
+        try {
+            sparePart = managerRepository.getPartById(id);
+        } catch (Exception e) {
+            logger.error("Cannot find in DB SparePart with ID: " + id);
+            return new ResponseEntity<>(sparePart, HttpStatus.NOT_FOUND);
+        }
+        if (sparePart == null) {
+            logger.error("No matches in DB for partId " + id + " wasn't found");
+            responseHeaders.set("SparePartFound", "false");
+            return new ResponseEntity<>(sparePart, responseHeaders, HttpStatus.NOT_FOUND);
+        } else {
+            responseHeaders.set("SparePartFound", "true");
+            logger.info("SparePart found ID: " + id);
+        }
+        return new ResponseEntity<>(sparePart, responseHeaders, HttpStatus.FOUND);
+    }
+
+//    /**
+//     * SparePart DETAIL By ID [GET]
+//     *
+//     * @param id unique repair ID
+//     * @return Particular repair in JSON
+//     */
+//    @ApiOperation(value = "find SparePart detail by ID", notes = "find SparePart detail by ID", produces = "application/json")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+//            @ApiResponse(code = 400, message = "Bad Request"),
+//            @ApiResponse(code = 404, message = "Not Found"),
+//            @ApiResponse(code = 500, message = "Failure")})
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "SparePart unique ID", value = "partId", required = true, dataType = "int", paramType = "query")
+//
+//    })
+//    @CrossOrigin()
+//    @RequestMapping(value = "/part/detail", method = RequestMethod.GET, produces = "application/json")
+//    public @ResponseBody
+//    ResponseEntity<List<SparePart>> getPartDetailById(@RequestParam(value = "id", required = true) Integer id) {
+//        List<SparePart> partDetail = new ArrayList<>();
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        try {
+//            partDetail = managerRepository.getPartDetailById(id);
+//        } catch (Exception e) {
+//            logger.error("Cannot find in DB SparePart with ID: " + id);
+//            responseHeaders.set("SparePartDetailFound", "false");
+//            return new ResponseEntity<>(partDetail, responseHeaders, HttpStatus.NOT_FOUND);
+//        }
+//        if (partDetail == null || partDetail.size() <= 0) {
+//            logger.error("No matches in DB for partId: " + id + " wasn't found");
+//            responseHeaders.set("SparePartDetailFound", "false");
+//            return new ResponseEntity<>(partDetail, responseHeaders, HttpStatus.NOT_FOUND);
+//        } else {
+//            responseHeaders.set("SparePartDetailFound", "true");
+//            logger.info("SparePartDetail found ID: " + id);
+//        }
+//        return new ResponseEntity<>(partDetail, responseHeaders, HttpStatus.FOUND);
+//    }
+
+    /**
+     * Inserts new SparePart into DB [POST]
+     *
+     * @param sparePart new object
+     * @return if success same body
+     */
+    @SuppressWarnings("Duplicates")
+    @ApiOperation(value = "Post new SparePart", notes = "Post new SparePart", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
+    @CrossOrigin()
+    @RequestMapping(value = "/part", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<SparePart> insertNewPart(@RequestBody SparePart sparePart) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        try {
+            //TODO find why partId dont generate
+            managerRepository.insertPart(sparePart);
+        } catch (Exception e) {
+            logger.error(e);
+            if (e instanceof org.springframework.dao.DuplicateKeyException) {
+                responseHeaders.set("SparePartSaved", "false");
+                responseHeaders.set("DuplicatedSparePart", "true");
+            }
+            return new ResponseEntity<>(HttpStatus.INSUFFICIENT_STORAGE);
+        }
+        responseHeaders.set("SparePartSaved", "true");
+        logger.info("New SparePart is saved. Repair ID: " + sparePart.getPartId());
+        return new ResponseEntity<>(sparePart, responseHeaders, HttpStatus.CREATED);
+    }
+
+    /**
+     * Update SparePart information in DB [PUT]
+     *
+     * @param sparePart updated Object of SparePart
+     * @return if success returns updated body of SparePart
+     */
+    @ApiOperation(value = "Update SparePart", notes = "Update SparePart", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
+    @CrossOrigin()
+    @RequestMapping(value = "/part", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<SparePart> updatePart(@RequestBody SparePart sparePart) {
+        try {
+            managerRepository.updatePart(sparePart);
+        } catch (Exception e) {
+            logger.error(e);
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("SparePartUpdated", "true");
+        logger.info("SparePart updated. SparePart ID: " + sparePart.getPartId());
+        return new ResponseEntity<>(sparePart, responseHeaders, HttpStatus.CREATED);
+    }
+
+    /**
+     * Delete SparePart by ID
+     *
+     * @param id is obtained from FE
+     * @return null
+     */
+    @ApiOperation(value = "Delete SparePart", notes = "Delete SparePart", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
+    @CrossOrigin()
+    @RequestMapping(value = "/part", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<Car> deletePart(@RequestParam(value = "id", required = true) Integer id) {
+        try {
+            managerRepository.deletePart(id);
+        } catch (Exception e) {
+            logger.error(e);
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("SparePartDeleted", "true");
+        logger.info("SparePart Deleted. SparePart ID: " + id);
+        return new ResponseEntity<>(responseHeaders, HttpStatus.OK);
+    }
+
 }
