@@ -6,6 +6,7 @@ import com.autoopravy.semerad.manazer.InternalManager.model.Customer;
 import com.autoopravy.semerad.manazer.InternalManager.model.Repair;
 import com.autoopravy.semerad.manazer.InternalManager.model.SparePart;
 import com.wordnik.swagger.annotations.*;
+import com.wordnik.swagger.annotations.ApiResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,15 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/manager")
+@RequestMapping
 public class ManagerController {
 
     Logger logger = Logger.getLogger(ManagerController.class);
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private ManagerRepository managerRepository;
 
-    public ManagerController(ManagerRepository managerRepository) {
+    public ManagerController(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") ManagerRepository managerRepository) {
         this.managerRepository = managerRepository;
     }
 
