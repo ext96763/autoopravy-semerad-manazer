@@ -5,10 +5,10 @@ import com.autoopravy.semerad.manazer.InternalManager.model.Car;
 import com.autoopravy.semerad.manazer.InternalManager.model.Customer;
 import com.autoopravy.semerad.manazer.InternalManager.model.Repair;
 import com.autoopravy.semerad.manazer.InternalManager.model.SparePart;
-import com.wordnik.swagger.annotations.*;
-import com.wordnik.swagger.annotations.ApiResponse;
 import org.apache.log4j.Logger;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping
-public class ManagerController {
+public class ManagerController implements ErrorController {
 
     Logger logger = Logger.getLogger(ManagerController.class);
 
@@ -31,6 +31,10 @@ public class ManagerController {
         this.managerRepository = managerRepository;
     }
 
+    @Override
+    public String getErrorPath() {
+        return null;
+    }
 
     @ApiOperation(value = "Find all users", notes = "find all users", produces = "application/json")
     @ApiResponses(value = {
@@ -96,10 +100,6 @@ public class ManagerController {
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "User unique ID", value = "userId", required = true, dataType = "int", paramType = "query")
-
-    })
     @CrossOrigin()
     @RequestMapping(value = "/user", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -129,16 +129,12 @@ public class ManagerController {
      * @param id unique user ID
      * @return Particular user in JSON
      */
-    @ApiOperation(value = "find user detail by ID", notes = "find user detail by ID", produces = "application/json")
+    @ApiOperation(value = "Find user detail by ID", notes = "find user detail by ID", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "User unique ID", value = "userId", required = true, dataType = "int", paramType = "query")
-
-    })
     @CrossOrigin()
     @RequestMapping(value = "/user/detail", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -171,7 +167,7 @@ public class ManagerController {
      * @return if success same body
      */
     @SuppressWarnings("Duplicates")
-    @ApiOperation(value = "Post new User", notes = "Post new User", produces = "application/json")
+    @ApiOperation(value = "Put new User", notes = "Post new User", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
@@ -203,7 +199,7 @@ public class ManagerController {
      * @param customer updated Object of user
      * @return if success returns updated body of user
      */
-    @ApiOperation(value = "Update User", notes = "Update User", produces = "application/json")
+    @ApiOperation(value = "Update User", notes = "update user", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
@@ -232,7 +228,7 @@ public class ManagerController {
      * @param id is obtained from FE
      * @return null
      */
-    @ApiOperation(value = "Delete User", notes = "Delete User", produces = "application/json")
+    @ApiOperation(value = "Delete User", notes = "Erase User", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
@@ -262,16 +258,12 @@ public class ManagerController {
      *
      * @return Particular car in JSON
      */
-    @ApiOperation(value = "Search car by ID", notes = "Look for car by ID", produces = "application/json")
+    @ApiOperation(value = "Find car by ID", notes = "Look for car by ID", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Car unique ID", value = "userId", required = true, dataType = "int", paramType = "query")
-
-    })
     @CrossOrigin()
     @RequestMapping(value = "/car", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -301,16 +293,12 @@ public class ManagerController {
      * @param id unique car ID
      * @return Particular car in JSON
      */
-    @ApiOperation(value = "find car detail by ID", notes = "find car detail by ID", produces = "application/json")
+    @ApiOperation(value = "Find car detail by ID", notes = "Look for car detail by ID", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Car unique ID", value = "carId", required = true, dataType = "int", paramType = "query")
-
-    })
     @CrossOrigin()
     @RequestMapping(value = "/car/detail", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -342,7 +330,7 @@ public class ManagerController {
      * @return if success same body
      */
     @SuppressWarnings("Duplicates")
-    @ApiOperation(value = "Post new Car", notes = "Post new Car", produces = "application/json")
+    @ApiOperation(value = "Put new Car", notes = "Post new Car", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
@@ -374,7 +362,7 @@ public class ManagerController {
      * @param car updated Object of car
      * @return if success returns updated body of car
      */
-    @ApiOperation(value = "Update Car", notes = "Update Car", produces = "application/json")
+    @ApiOperation(value = "Update Car", notes = "update car", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
@@ -402,7 +390,7 @@ public class ManagerController {
      * @param id is obtained from FE
      * @return null
      */
-    @ApiOperation(value = "Delete Car", notes = "Delete Car", produces = "application/json")
+    @ApiOperation(value = "Delete Car", notes = "Erase Car", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
@@ -431,16 +419,12 @@ public class ManagerController {
      *
      * @return Particular repair in JSON
      */
-    @ApiOperation(value = "Search repair by ID", notes = "Look for repair by ID", produces = "application/json")
+    @ApiOperation(value = "Find repair by ID", notes = "Look for repair by ID", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Repair unique ID", value = "repairId", required = true, dataType = "int", paramType = "query")
-
-    })
     @CrossOrigin()
     @RequestMapping(value = "/repair", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -471,16 +455,12 @@ public class ManagerController {
      * @param id unique repair ID
      * @return Particular repair in JSON
      */
-    @ApiOperation(value = "find repair detail by ID", notes = "find repair detail by ID", produces = "application/json")
+    @ApiOperation(value = "Find repair detail by ID", notes = "Look for repair detail by ID", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Repair unique ID", value = "repairId", required = true, dataType = "int", paramType = "query")
-
-    })
     @CrossOrigin()
     @RequestMapping(value = "/repair/detail", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -512,7 +492,7 @@ public class ManagerController {
      * @return if success same body
      */
     @SuppressWarnings("Duplicates")
-    @ApiOperation(value = "Post new Repair", notes = "Post new Repair", produces = "application/json")
+    @ApiOperation(value = "Put new Repair", notes = "Post new Repair", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
@@ -544,7 +524,7 @@ public class ManagerController {
      * @param repair updated Object of repair
      * @return if success returns updated body of repair
      */
-    @ApiOperation(value = "Update Repair", notes = "Update Repair", produces = "application/json")
+    @ApiOperation(value = "Update Repair", notes = "update repair", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
@@ -573,7 +553,7 @@ public class ManagerController {
      * @param id is obtained from FE
      * @return null
      */
-    @ApiOperation(value = "Delete Repair", notes = "Delete Repair", produces = "application/json")
+    @ApiOperation(value = "Delete Repair", notes = "Erase Repair", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
@@ -602,16 +582,12 @@ public class ManagerController {
      *
      * @return Particular SparePart in JSON
      */
-    @ApiOperation(value = "Search SparePart by ID", notes = "Look for SparePart by ID", produces = "application/json")
+    @ApiOperation(value = "Find SparePart by ID", notes = "Look for SparePart by ID", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "SparePart unique ID", value = "partId", required = true, dataType = "int", paramType = "query")
-
-    })
     @CrossOrigin()
     @RequestMapping(value = "/part", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -642,7 +618,7 @@ public class ManagerController {
      * @return if success same body
      */
     @SuppressWarnings("Duplicates")
-    @ApiOperation(value = "Post new SparePart", notes = "Post new SparePart", produces = "application/json")
+    @ApiOperation(value = "Put new SparePart", notes = "Post new SparePart", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
@@ -674,7 +650,7 @@ public class ManagerController {
      * @param sparePart updated Object of SparePart
      * @return if success returns updated body of SparePart
      */
-    @ApiOperation(value = "Update SparePart", notes = "Update SparePart", produces = "application/json")
+    @ApiOperation(value = "Update SparePart", notes = "update sparePart", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
@@ -702,7 +678,7 @@ public class ManagerController {
      * @param id is obtained from FE
      * @return null
      */
-    @ApiOperation(value = "Delete SparePart", notes = "Delete SparePart", produces = "application/json")
+    @ApiOperation(value = "Delete SparePart", notes = "Erase SparePart", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
             @ApiResponse(code = 400, message = "Bad Request"),
