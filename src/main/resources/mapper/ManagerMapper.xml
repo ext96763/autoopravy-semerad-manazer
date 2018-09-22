@@ -93,9 +93,10 @@
 
     <select id="getUserDetailById" resultMap="userResultMap">
         SELECT *
-        FROM customers u LEFT JOIN repairs r ON u.user_id = r.repair_user_id
-            LEFT JOIN cars c ON c.car_user_id = u.user_id
-            LEFT JOIN parts p ON p.part_user_id = u.user_id
+        FROM customers u
+                 LEFT JOIN cars r ON u.user_id = r.car_user_id
+                 LEFT JOIN repairs c ON c.repair_user_id = u.user_id
+                 LEFT JOIN parts p ON p.part_user_id = u.user_id
         WHERE 1 = 1 AND u.user_id = #{userId};
     </select>
 
