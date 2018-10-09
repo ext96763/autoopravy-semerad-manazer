@@ -170,6 +170,7 @@ public class ManagerController implements ErrorController {
     @ApiOperation(value = "Put new User", notes = "Post new User", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 201, message = "Created"),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
@@ -333,6 +334,7 @@ public class ManagerController implements ErrorController {
     @ApiOperation(value = "Put new Car", notes = "Post new Car", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 201, message = "Created"),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
@@ -495,6 +497,7 @@ public class ManagerController implements ErrorController {
     @ApiOperation(value = "Put new Repair", notes = "Post new Repair", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 201, message = "Created"),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
@@ -621,6 +624,7 @@ public class ManagerController implements ErrorController {
     @ApiOperation(value = "Put new SparePart", notes = "Post new SparePart", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ManagerController.class),
+            @ApiResponse(code = 201, message = "Created"),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
