@@ -9,7 +9,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeRequests().anyRequest().permitAll();
+        httpSecurity.ignoring().antMatchers(POST, "/**");
     }
 
 }
