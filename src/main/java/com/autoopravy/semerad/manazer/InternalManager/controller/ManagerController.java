@@ -321,7 +321,7 @@ public class ManagerController implements ErrorController {
             responseHeaders.set("CarDetailFound", "true");
             logger.info("CarDetail found ID: " + id);
         }
-        return new ResponseEntity<>(carDetail, responseHeaders, HttpStatus.FOUND);
+        return new ResponseEntity<>(carDetail, responseHeaders, HttpStatus.OK);
     }
 
     /**
