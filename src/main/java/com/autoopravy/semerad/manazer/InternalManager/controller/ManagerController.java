@@ -156,7 +156,7 @@ public class ManagerController implements ErrorController {
             responseHeaders.set("UserDetailFound", "true");
             logger.info("UserDetail found ID: " + id);
         }
-        return new ResponseEntity<>(customerDetail, responseHeaders, HttpStatus.FOUND);
+        return new ResponseEntity<>(customerDetail, responseHeaders, HttpStatus.OK);
     }
 
 
